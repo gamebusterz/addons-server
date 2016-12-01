@@ -1,32 +1,45 @@
 @import '../common/normalize.css';
 @import '../impala/fonts/fira/fira.less';
 
-// Colors
-@primary-font: 'Fira Sans', sans-serif;
-@primary-font-color: #fff;
-@secondary-font-color: #333;
-@tertiary-font-color: #40d38d;
-
-@button-border: #979797;
-@primary-button-background: #29c978;
-
-@primary-section-background: #0568ba;
-@secondary-section-background: #f3f5f8;
-@tertiary-section-background: #1d3770;
-
+// Grid
+@grid-max: 940px;
 @phone-large: ~"only screen and (min-width: 428px)";
 @phone: ~"only screen and (max-width: 768px)";
 @tablet: ~"only screen and (min-width: 768px)";
 @desktop: ~"only screen and (min-width: 1024px)";
 
+// Fonts
+@font-primary: 'Fira Sans', sans-serif;
+
+// Colors
+@color-text: #333;
+@color-items: #fff;
+
+// Color Schemes
+// Light
+@color-scheme-light-text: #333;
+@color-scheme-light-background: #f1f3f6;
+
+// Medium
+@color-scheme-medium-text: #fff;
+@color-scheme-medium-background: #0568ba;
+@color-scheme-medium-items: #29c978;
+
+// Dark
+@color-scheme-dark-text: #fff;
+@color-scheme-dark-background: #1d3770;
+@color-scheme-dark-items: #40d38d;
+
 // Common styles
 * {
-  font-family: @primary-font;
+  font-family: @font-primary;
 }
 
 body {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-flow: column;
 }
 
 h1 {
@@ -37,17 +50,7 @@ h1 {
   margin-top: 0;
 }
 
-section {
-  padding: 20px 20px 60px;
-
-  > p {
-    font-weight: 300;
-    margin-top: 10px;
-  }
-}
-
-// Utilities
-
+// Mixins / Utilities
 .show-on-desktop {
   display: none;
 
@@ -62,21 +65,82 @@ section {
   }
 }
 
-// Components
+.content {
+  width: 100%;
 
+  > div {
+    color: @color-text;
+    padding: 20px 20px;
+
+    @media @tablet {
+      padding: 20px 60px;
+      max-width: @grid-max;
+      margin: 0 auto;
+    }
+  }
+
+  p,
+  li {
+    font-weight: 300;
+    color: @color-text;
+  }
+}
+
+.scheme-light {
+  background-color: @color-scheme-light-background;
+
+  p,
+  li {
+    color: @color-scheme-light-text;
+  }
+
+  &:before,
+  &:after {
+    background-color: @color-scheme-light-background;
+  }
+}
+
+.scheme-medium {
+  background-color: @color-scheme-medium-background;
+
+  p,
+  li {
+    color: @color-scheme-medium-text;
+  }
+
+  &:before,
+  &:after {
+    background-color: @color-scheme-medium-background;
+  }
+}
+
+.scheme-dark {
+  background-color: @color-scheme-dark-background;
+
+  p,
+  li {
+    color: @color-scheme-dark-text;
+  }
+
+  &:before,
+  &:after {
+    background-color: @color-scheme-dark-background;
+  }
+}
+
+// Components
 .Button {
   border-radius: 2px;
-  border: 1px @button-border;
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.3);
-  color: @primary-font-color;
+  color: @color-items;
   display: inline-block;
   padding: 10px 30px;
   text-align: center;
   text-decoration: none;
-}
 
-.Button--primary {
-  background-color: @primary-button-background;
+  .scheme-medium & {
+    background-color: @color-scheme-medium-items;
+  }
 }
 
 .Logo {
@@ -100,16 +164,17 @@ section {
       margin-left: 10px;
     }
   }
-}
 
-.Logo--secondary::before {
-  background: url('../../img/developers/addons-logo-black.svg') no-repeat left center;
-  background-size: contain;
+  .scheme-medium & {
+    background: url('../../img/developers/addons-logo-black.svg') no-repeat left center;
+    background-size: contain;
+  }
 }
 
 .DevHub-Navigation {
-  background-color: @primary-section-background;
-  padding: 0 20px 20px;
+  > div {
+    padding-top: 5px;
+  }
 
   ul {
     align-items: center;
@@ -123,33 +188,7 @@ section {
       margin: 10px 20px;
 
       &:first-child {
-        margin-left: 0;
-        margin-right: auto;
-
-        @media @phone-large {
-          margin-left: 20px;
-        }
-
-        @media @tablet {
-          margin-left: 60px;
-        }
-      }
-    }
-
-    a {
-      color: @primary-font-color;
-      text-decoration: none;
-    }
-  }
-}
-
-.DevHub-Navigation--signedin {
-  background-color: @secondary-section-background;
-
-  ul {
-    li {
-      a {
-        color: @secondary-font-color;
+        margin: 0 auto 0 0;
       }
 
       &.avatar {
@@ -164,36 +203,44 @@ section {
           border-radius: 50%;
         }
       }
+
+      a {
+        color: @color-text;
+        text-decoration: none;
+      }
+    }
+  }
+
+  // Schemas:
+  &.scheme-light {
+    ul li a {
+      color: @color-scheme-light-text;
+    }
+  }
+
+  &.scheme-medium {
+    ul li a {
+      color: @color-scheme-medium-text;
     }
   }
 }
 
-.DevHub-Content {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.DevHub-Header {
-  background-color: @primary-section-background;
-  flex: 1 100%;
-
+.DevHub-Overview {
   @media @phone-large {
     text-align: center;
   }
 
-  h1,
-  p {
-    color: @primary-font-color;
+  h1 {
+    color: @color-scheme-medium-text;
   }
 
   p {
-    font-weight: 300;
     font-size: 24px;
     margin: 20px auto;
     max-width: 560px;
 
     > a {
-      color: @primary-font-color;
+      color: @color-scheme-medium-text;
     }
 
     @media @phone {
@@ -202,16 +249,29 @@ section {
   }
 }
 
-.DevHub-BlogPosts {
-  background-color: @tertiary-section-background;
-  color: @primary-font-color;
-  flex: 1 100%;
+.DevHub-MoreInformation {
+  > div {
+    display: flex;
+    flex-flow: column;
 
+    @media @tablet {
+      flex-flow: row nowrap;
+    }
+  }
+}
+
+.DevHub-BlogPosts,
+.DevHub-Tools {
+  line-height: 1.5;
+  margin: 20px 0 auto;
+
+  h2,
   h2 a {
-    color: @primary-font-color;
+    color: @color-scheme-dark-text;
     text-decoration: none;
-    font-size: 32px;
     font-weight: 500;
+    font-size: 32px;
+    margin: 0;
   }
 
   ul {
@@ -220,7 +280,7 @@ section {
 
     li {
       a {
-        color: @tertiary-font-color;
+        color: @color-scheme-dark-items;
         text-decoration: none;
       }
 
@@ -229,10 +289,23 @@ section {
       }
     }
   }
+}
 
+.DevHub-BlogPosts {
   .read-more {
     text-decoration: none;
-    color: @tertiary-font-color;
+    color: @color-scheme-dark-items;
     font-weight: 600;
+  }
+}
+
+.DevHub-Tools {
+  ul {
+    li {
+      a {
+        font-size: 24px;
+        font-weight: 600;
+      }
+    }
   }
 }
